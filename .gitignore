@@ -2,6 +2,7 @@
 .gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
+.github/
 
 # IntelliJ IDEA
 .idea/

@@ -48,7 +48,7 @@ docker compose up --build
 ### 1. Fazer o build da imagem
 
 ```bash
-docker build -t prixua/data-ingestion-api:0.0.1 .
+docker build -t prixua/data-ingestion-api:latest .
 ```
 
 ### 2. Login no Docker Hub
@@ -69,53 +69,13 @@ docker push prixua/data-ingestion-api:0.0.1
 
 Apenas o arquivo `docker-compose.prod.yml` é necessário — não precisa clonar o repositório.
 
-### 1. Obter o arquivo `docker-compose.prod.yml`
-
-**Opção A — via curl (somente se o repositório estiver público no GitHub):**
+### 1. Baixar o arquivo
 
 ```bash
 curl -O https://raw.githubusercontent.com/prixua/data-ingestion-api/main/docker-compose.prod.yml
 ```
 
-> Se retornar erro 404, o repositório ainda não está publicado. Use a Opção B.
-
-**Opção B — criar o arquivo manualmente:**
-
-Crie um arquivo chamado `docker-compose.prod.yml` com o seguinte conteúdo:
-
-```yaml
-services:
-  mongodb:
-    image: mongo:7.0
-    container_name: data-ingestion-mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_DATABASE: data_ingestion
-    volumes:
-      - mongodb_data:/data/db
-    healthcheck:
-      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  app:
-    image: prixua/data-ingestion-api:latest
-    container_name: data-ingestion-api
-    ports:
-      - "8080:8080"
-      - "9090:8080"
-    environment:
-      SPRING_PROFILES_ACTIVE: local
-      MONGODB_URI: mongodb://mongodb:27017/data_ingestion
-    depends_on:
-      mongodb:
-        condition: service_healthy
-
-volumes:
-  mongodb_data:
-```
+Ou copie o arquivo `docker-compose.prod.yml` disponível neste repositório.
 
 ### 2. Executar
 
